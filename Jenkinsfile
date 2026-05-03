@@ -1,24 +1,30 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage('Print Info'){
-            steps{
+    stages {
+        stage('Print Info') {
+            steps {
                 sh 'echo "Branch: $(git rev-parse --abbrev-ref HEAD)"'
                 sh 'echo "Hash: $(git rev-parse HEAD)"'
                 sh 'echo "g++ version: $(g++ --version)"'
             }
         }
-        stage('Build Executable file'){
-            steps{
-                // Компилируем main.cpp и сохраняем результат в файл main
+        stage('Build Executable file') {
+            steps {
                 sh 'g++ main.cpp -o main'
             }
         }
-        stage('Application Launch Test'){
-            steps{
-                // Запускаем исполняемый файл main из текущего каталога
+        stage('Application Launch Test') {
+            steps {
                 sh './main'
             }
+        }
+    }
+    post {
+        success {
+            echo 'You can go home'
+        }
+        failure {
+            echo 'Sit and work on'
         }
     }
 }
